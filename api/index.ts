@@ -24,7 +24,13 @@ const newspapers = [
   }
 ]
 
-const articles = [];
+interface Article {
+  title: string;
+  url: string;
+  source: string;
+}
+
+const articles: Article[] = [];
 
 newspapers.forEach(newspaper => {
   axios.get(newspaper.address)
@@ -64,7 +70,7 @@ appExpress.get('/news/:newspaperId', (req, res) => {
   .then(response => {
     const html = response.data
     const $ = cheerio.load(html)
-    const specificArticles = []
+    const specificArticles: Article [] = []
 
     $('a:contains("climate")', html).each(function() {
       const title = $(this).text()
@@ -81,3 +87,5 @@ appExpress.get('/news/:newspaperId', (req, res) => {
 
 
 appExpress.listen(PORT, () => console.log(`Climate API running on PORT ${PORT}`));
+
+module.exports = appExpress;
